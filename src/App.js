@@ -1,7 +1,8 @@
+import SampleForm from "./components/SampleForm/SampleForm";
 import "./App.css";
 
 function App() {
-	return <div className="App">Hello world</div>;
+	return <SampleForm />;
 }
 
 export default App;

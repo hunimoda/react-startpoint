@@ -1,57 +1,37 @@
-import React, { useState, useEffect } from "react";
+import classes from "./Input.module.css";
 
 /**
- * @param {onUpdate, id, label} props	All props required.
+ *
+ * @param	  {error, id, label, type, onChange, onBlur}	props
+ * 		@var	error			Error object {show, message}
+ * 		@var	id				ID for label and input
+ * 		@var	label			Label text
+ * 		@var	onChange	Input change handler
+ * 		@var	onBlur		Input blur handler
  *
  * @returns
  */
 const Input = (props) => {
-	/*** States *****************************************/
-	const [value, setValue] = useState("");
-	const [isTouched, setIsTouched] = useState(false);
-	const [error, setError] = useState(null);
+	const showError = props.error.show;
+	const controlClassName = `${classes["form-control"]} ${
+		showError ? classes.invalid : ""
+	}`;
+	const errorMessage = showError && (
+		<p className={classes["error-message"]}>{props.error.message}</p>
+	);
 
-	/**
-	 * Updates the value in the parent component
-	 *
-	 * onUpdate prop must be memoized in the parent-side (useCallback)
-	 * and should return any validation error.
-	 */
-	const { onUpdate } = props;
-	useEffect(() => {
-		setError(onUpdate(value));
-	}, [onUpdate, value]);
-
-	/*** Handlers ***************************************/
-	const changeHandler = (event) => {
-		setIsTouched(true);
-		setValue(event.target.value);
-	};
-	const blurHandler = () => {
-		setIsTouched(true);
-	};
-
-	const showError = error && isTouched;
-	const divClassName = "form-control " + (showError ? "invalid" : "");
-	const errorMessage = showError ? (
-		<p className="error-message">{error}</p>
-	) : null;
-
-	/*** JSX ********************************************/
 	return (
-		<div className={divClassName}>
+		<div className={controlClassName}>
 			<label htmlFor={props.id}>{props.label}</label>
 			<input
-				type="text"
+				type={props.type ?? "text"}
 				id={props.id}
-				onChange={changeHandler}
-				onBlur={blurHandler}
-				value={value}
+				onChange={props.onChange}
+				onBlur={props.onBlur}
 			/>
 			{errorMessage}
 		</div>
 	);
 };
 
-// Prevent evaluation on parent evaluation
-export default React.memo(Input);
+export default Input;
