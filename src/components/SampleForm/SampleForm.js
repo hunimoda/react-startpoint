@@ -1,6 +1,44 @@
 import { useInput } from "../../hooks/use-input";
 import Input from "../UI/Input/Input";
 
+/*** Validate functions ******************************/
+const validateFirstName = (firstName) => {
+	if (firstName.trim().length === 0) {
+		return "Empty value is not allowed.";
+	}
+	if (firstName.match(/[^a-z]/i) !== null) {
+		return "Name should contain only alphabets.";
+	}
+	if (firstName.match(/^[A-Z]/) === null) {
+		return "Name should start with a capital letter.";
+	}
+	return "";
+};
+
+const validateLastName = (lastName) => {
+	return "";
+};
+
+const validateEmail = (email) => {
+	if (email.trim().length === 0) {
+		return "Empty value is not allowed.";
+	}
+	if (email.match(/[^a-z@.]/i) !== null) {
+		return "Invalid character is included.";
+	}
+	if (email.match(/^[a-z]/i) === null) {
+		return "Email should start with an alphabet.";
+	}
+	if (!email.includes("@")) {
+		return "Email should include the '@' symbol.";
+	}
+	if (email.match(/\.[a-z]+$/i) === null) {
+		return "Email address seems to be invalid.";
+	}
+	return "";
+};
+/******************************************************/
+
 /**
  * Sample form using custom hook and UI (useInput & Input)
  *
@@ -15,51 +53,24 @@ const BasicForm = (props) => {
 		error: firstNameError,
 		changeHandler: firstNameChangeHandler,
 		blurHandler: firstNameBlurHandler,
-	} = useInput((firstName) => {
-		if (firstName.trim().length === 0) {
-			return "Empty value is not allowed.";
-		}
-		if (firstName.match(/[^a-z]/i) !== null) {
-			return "Name should contain only alphabets.";
-		}
-		if (firstName.match(/^[A-Z]/) === null) {
-			return "Name should start with a capital letter.";
-		}
-		return "";
-	});
+		reset: resetFirstName,
+	} = useInput(validateFirstName);
 
 	const {
 		value: lastName,
 		error: lastNameError,
 		changeHandler: lastNameChangeHandler,
 		blurHandler: lastNameBlurHandler,
-	} = useInput((lastName) => {
-		return "";
-	});
+		reset: resetLastName,
+	} = useInput(validateLastName);
 
 	const {
 		value: email,
 		error: emailError,
 		changeHandler: emailChangeHandler,
 		blurHandler: emailBlurHandler,
-	} = useInput((email) => {
-		if (email.trim().length === 0) {
-			return "Empty value is not allowed.";
-		}
-		if (email.match(/[^a-z@.]/i) !== null) {
-			return "Invalid character is included.";
-		}
-		if (email.match(/^[a-z]/i) === null) {
-			return "Email should start with an alphabet.";
-		}
-		if (!email.includes("@")) {
-			return "Email should include the '@' symbol.";
-		}
-		if (email.match(/\.[a-z]+$/i) === null) {
-			return "Email address seems to be invalid.";
-		}
-		return "";
-	});
+		reset: resetEmail,
+	} = useInput(validateEmail);
 
 	// Check if the overall form is valid
 	const isFormValid =
@@ -77,6 +88,11 @@ const BasicForm = (props) => {
 		console.log("Last name  : " + lastName);
 		console.log("Email      : " + email);
 		/********************************************/
+
+		// Reset all inputs
+		resetFirstName();
+		resetLastName();
+		resetEmail();
 	};
 
 	return (
@@ -88,6 +104,7 @@ const BasicForm = (props) => {
 					label="First Name"
 					onChange={firstNameChangeHandler}
 					onBlur={firstNameBlurHandler}
+					value={firstName}
 				/>
 				<Input
 					error={lastNameError}
@@ -95,6 +112,7 @@ const BasicForm = (props) => {
 					label="Last Name"
 					onChange={lastNameChangeHandler}
 					onBlur={lastNameBlurHandler}
+					value={lastName}
 				/>
 			</div>
 			<Input
@@ -103,9 +121,10 @@ const BasicForm = (props) => {
 				label="E-Mail Address"
 				onChange={emailChangeHandler}
 				onBlur={emailBlurHandler}
+				value={email}
 			/>
 			<div className="form-actions">
-				<button>Submit</button>
+				<button disabled={!isFormValid}>Submit</button>
 			</div>
 		</form>
 	);

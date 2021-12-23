@@ -25,6 +25,11 @@ export const useInput = (validate) => {
 		setIsTouched(true);
 	};
 
+	const reset = () => {
+		setValue("");
+		setIsTouched(false);
+	};
+
 	return {
 		value,
 		error: {
@@ -33,5 +38,6 @@ export const useInput = (validate) => {
 		},
 		changeHandler,
 		blurHandler,
+		reset,
 	};
 };
