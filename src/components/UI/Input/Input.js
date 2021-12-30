@@ -1,16 +1,13 @@
 import classes from "./Input.module.css";
 
 /**
- *
  * @param	  {error, id, label, type, onChange, onBlur, value}	props
- * 		@var	error			Error object {show, message}
- * 		@var	id				ID for label and input
- * 		@var	label			Label text
- * 		@var	onChange	Input change handler
- * 		@var	onBlur		Input blur handler
- * 		@var	value			Input value
- *
- * @returns
+ * 		error			Error object {show, message}
+ * 		id				ID for label and input
+ * 		label			Label text
+ * 		onChange	Input change handler
+ * 		onBlur		Input blur handler
+ * 		value			Input value
  */
 const Input = (props) => {
 	const showError = props.error.show;
