@@ -1,8 +1,8 @@
-import SampleForm from "./components/SampleForm/SampleForm";
+import Modal from "./components/UI/Modal/Modal";
 import "./App.css";
 
 function App() {
-	return <SampleForm />;
+	return <Modal show={true}>Loading spinner</Modal>;
 }
 
 export default App;
